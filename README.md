@@ -23,8 +23,8 @@ Array
 ├─ name: "Vladimir"
 ├─ age: 30
 └─ address: Array
-│  ├─ city: "Moscow"
-│  ├─ street: "Lenina"
-│  ├─ house: 1
-│  └─ flat: 1
+   ├─ city: "Moscow"
+   ├─ street: "Lenina"
+   ├─ house: 1
+   └─ flat: 1
 ```
