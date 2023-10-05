@@ -2,8 +2,11 @@
 
 class Object2Tree
 {
-    public static function convert(array|object $data, $indent = '', $isLast = true): string
+    public static function convert(array|object $data, $indent = ''): string
     {
+        if ($data instanceof Closure) {
+            return 'Closure';
+        }
         $tree = self::formatTitle($data)."\n";
 
         $data = (array) $data;
@@ -11,16 +14,16 @@ class Object2Tree
         $lastKey = end($keys);
 
         foreach ($data as $key => $value) {
-            $isCurrentLast = ($key === $lastKey);
             $tree .= $indent;
+            $isLast = $key === $lastKey;
 
-            $tree .= $isCurrentLast ? '└─ ' : '├─ ';
-            $newIndent = $indent.($isLast ? '│  ' : ($isCurrentLast ? '   ' : '│  '));
+            $tree .= $isLast ? '└─ ' : '├─ ';
+            $newIndent = $indent.($isLast ? '   ' : '│  ');
 
             $tree .= "$key: ";
 
             if (is_array($value) || is_object($value)) {
-                $tree .= self::convert($value, $newIndent, $isCurrentLast);
+                $tree .= self::convert($value, $newIndent);
             } else {
                 $tree .= self::formatValue($value)."\n";
             }
@@ -34,7 +37,7 @@ class Object2Tree
         $value = match (gettype($value)) {
             'boolean' => $value ? 'true' : 'false',
             'string' => '"'.$value.'"',
-            default => $value
+            default => (string) $value
         };
 
         return $value ?? 'null';
